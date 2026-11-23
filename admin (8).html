@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ATELIER & ELEGANCE – Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.76.1/dist/umd/supabase.min.js"></script>
+<style>
+body{font-family:Arial,sans-serif;background:#f6f0e6;color:#1c1917;margin:0;padding:16px}
+input,select,button{padding:10px;border-radius:8px;border:1px solid #d6c7ab;font-size:15px}
+button{background:#1c1917;color:#f6f0e6;border:0;font-weight:bold;cursor:pointer}
+#login{max-width:320px;margin:60px auto;display:grid;gap:10px}#app{display:none}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}.stats div{background:#fffaf2;border:1px solid #eadfc9;border-radius:10px;padding:8px 14px}.stats b{color:#b8893b;font-size:20px;display:block}
+.w{overflow-x:auto}table{border-collapse:collapse;width:100%;background:#fffaf2;font-size:14px}
+th{background:#1c1917;color:#f6f0e6}td,th{padding:8px;border-bottom:1px solid #eadfc9;text-align:start;vertical-align:top}td.i{min-width:180px}
+.Confirmed{background:#c6efce}.Waiting{background:#ffeb9c}.False\ order{background:#ffc7ce}.On\ check{background:#bdd7ee}.Double\ order{background:#e4c8f0}
+</style></head><body>
+<form id="login"><h2>ATELIER &amp; ELEGANCE<br><small>Admin</small></h2>
+<input id="em" type="email" placeholder="Email" autocomplete="username" required>
+<input id="pw" type="password" placeholder="Mot de passe" autocomplete="current-password" required>
+<label style="font-size:14px"><input type="checkbox" id="rm" checked style="width:auto"> Rester connecté</label>
+<button type="submit">Connexion</button><small id="err" style="color:#c00"></small></form>
+<div id="app"><div class="stats" id="stats"></div>
+<div class="bar"><select id="flt"><option value="">Tous les statuts</option><option>Confirmed</option><option>Waiting</option><option>False order</option><option>On check</option><option>Double order</option></select><button id="rf">Actualiser</button><button id="out">Déconnexion</button></div>
+<div class="w"><table><thead><tr><th>Date</th><th>Cliente</th><th>Téléphone</th><th>Wilaya</th><th>Adresse</th><th>Articles</th><th>Livraison</th><th>Total</th><th>Statut</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+<script>
+const SUPABASE_URL="https://ifgajqynclqruungignf.supabase.co",SUPABASE_KEY="sb_publishable_WFCsqUHp4gGwKXBG3PutZg_YjJ2r0dD";
+const $=s=>document.querySelector(s);
+if(!window.supabase){$("#err").textContent="Bibliothèque non chargée";throw 0}
+const store=()=>localStorage.getItem("rm")==="0"?sessionStorage:localStorage;
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,storage:{getItem:k=>store().getItem(k),setItem:(k,v)=>store().setItem(k,v),removeItem:k=>{localStorage.removeItem(k);sessionStorage.removeItem(k)}}}});
+const ST=["Confirmed","Waiting","False order","On check","Double order"];
+const esc=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=n=>(n||0).toLocaleString("fr-FR")+" DA";
+async function load(){let q=sb.from("ae_orders").select("*").order("created_at",{ascending:false}).limit(500);
+  if($("#flt").value)q=q.eq("status",$("#flt").value);
+  const {data,error}=await q;if(error){alert(error.message);return}
+  $("#stats").innerHTML=`<div><b>${data.length}</b>commandes</div><div><b>${data.filter(o=>o.status==="Waiting").length}</b>en attente</div><div><b>${fmt(data.filter(o=>o.status==="Confirmed").reduce((s,o)=>s+o.total,0))}</b>confirmé</div>`;
+  $("#rows").innerHTML=data.map(o=>`<tr><td>${new Date(o.created_at).toLocaleString("fr-DZ")}</td><td>${esc(o.name)}</td><td><a href="tel:${esc(o.phone)}">${esc(o.phone)}</a></td><td>${esc(o.wilaya)}</td><td>${esc(o.address)}</td>
+  <td class="i">${(o.items||[]).map(i=>esc(i.name)+" × "+i.qty).join("<br>")}</td><td>${esc(o.delivery)}<br>${fmt(o.delivery_price)}</td><td><b>${fmt(o.total)}</b></td>
+  <td><select class="${o.status}" data-id="${o.id}">${ST.map(s=>`<option ${s===o.status?"selected":""}>${s}</option>`).join("")}</select></td></tr>`).join("")}
+$("#rows").onchange=async e=>{const s=e.target;const {error}=await sb.from("ae_orders").update({status:s.value}).eq("id",s.dataset.id);if(error)alert(error.message);else s.className=s.value};
+async function show(){const {data}=await sb.auth.getSession();const ok=!!data.session;$("#login").style.display=ok?"none":"grid";$("#app").style.display=ok?"block":"none";if(ok)load()}
+$("#login").onsubmit=async e=>{e.preventDefault();localStorage.setItem("rm",$("#rm").checked?"1":"0");const {error}=await sb.auth.signInWithPassword({email:$("#em").value,password:$("#pw").value});if(error)$("#err").textContent=error.message;else show()};
+$("#out").onclick=async()=>{await sb.auth.signOut();show()};$("#rf").onclick=load;$("#flt").onchange=load;show();
+</script></body></html>

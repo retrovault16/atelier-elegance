@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ATELIER &amp; ELEGANCE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Jost:wght@400;500&family=Cairo:wght@500;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f0e6;--ink:#1c1917;--gold:#b8893b;--blush:#ecd3c9;--card:#fffaf2;--mut:#7a6f63}
+*{box-sizing:border-box;margin:0}
+body{font-family:Jost,Cairo,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+[dir=rtl] body{font-family:Cairo,sans-serif}
+.serif{font-family:"Cormorant Garamond",Cairo,serif}
+header{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:14px 5vw;background:#f6f0eacc;backdrop-filter:blur(8px);border-bottom:1px solid #e3d6c0}
+.logo{font-size:22px;letter-spacing:.18em;font-weight:700;text-decoration:none;color:var(--ink)}.logo i{color:var(--gold);font-style:italic;padding:0 .15em}
+.hr{display:flex;gap:10px;align-items:center}
+.pill{border:1px solid var(--ink);background:none;border-radius:30px;padding:6px 16px;cursor:pointer;font:inherit;color:var(--ink)}
+.pill.on,.pill:hover{background:var(--ink);color:var(--bg)}
+.cartb{position:relative}.cartb b{position:absolute;top:-8px;inset-inline-end:-6px;background:var(--gold);color:#fff;border-radius:50%;width:20px;height:20px;font-size:12px;display:grid;place-items:center}
+.hero{display:grid;gap:30px;padding:50px 5vw 40px;align-items:center;overflow:hidden}
+@media(min-width:850px){.hero{grid-template-columns:1.1fr 1fr}}
+.hero h1{font-size:clamp(46px,9vw,104px);line-height:.95;font-weight:500}
+.hero h1 em{color:var(--gold)}
+.hero p{color:var(--mut);max-width:420px;margin:18px 0 26px}
+.cta{display:inline-block;background:var(--ink);color:var(--bg);padding:14px 34px;border-radius:40px;text-decoration:none;letter-spacing:.1em;font-size:14px;transition:.3s}.cta:hover{background:var(--gold)}
+.arches{position:relative;height:420px;display:flex;gap:14px;justify-content:center;align-items:flex-end}
+.arch{width:30%;border-radius:999px 999px 18px 18px;display:grid;place-items:center;font-size:54px;box-shadow:0 20px 40px #1c191722}
+.arch:nth-child(1){height:70%;background:linear-gradient(#ecd3c9,#d9a99a)}.arch:nth-child(2){height:100%;background:linear-gradient(#e8d3a3,#b8893b)}.arch:nth-child(3){height:82%;background:linear-gradient(#d8dccb,#9aa88a)}
+.badge{position:absolute;top:-6px;inset-inline-end:2%;width:120px;height:120px;animation:spin 18s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.marq{background:var(--ink);color:var(--bg);overflow:hidden;white-space:nowrap;padding:10px 0;letter-spacing:.3em;font-size:13px}
+.marq span{display:inline-block;animation:mq 25s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}[dir=rtl] .marq span{animation-direction:reverse}
+.sec{padding:50px 5vw}
+.sec h2{font-size:clamp(32px,5vw,48px);font-weight:500;text-align:center}
+.cats{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:20px 0 30px}
+.grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.p{background:var(--card);border-radius:20px;padding:12px;border:1px solid #eadfc9;transition:.3s}.p:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 18px 30px #b8893b22}
+.pi{aspect-ratio:3/4;border-radius:999px 999px 14px 14px;overflow:hidden;display:grid;place-items:center;font-size:56px}
+.pi img{width:100%;height:100%;object-fit:cover}
+.p h3{font-size:19px;margin:12px 4px 2px;font-weight:700}
+.row{display:flex;justify-content:space-between;align-items:center;margin:4px}
+.pr{color:var(--gold);font-weight:500}
+.add{border:1px solid var(--ink);background:none;border-radius:20px;padding:5px 14px;cursor:pointer;font:inherit;color:var(--ink)}.add:hover{background:var(--ink);color:var(--bg)}
+.dr{position:fixed;inset:0 0 0 auto;width:min(430px,100%);background:var(--bg);z-index:40;transform:translateX(105%);transition:.35s;overflow-y:auto;padding:22px;box-shadow:-10px 0 40px #0003}
+[dir=rtl] .dr{inset:0 auto 0 0;transform:translateX(-105%);box-shadow:10px 0 40px #0003}
+.dr.o{transform:none}
+.ov{position:fixed;inset:0;background:#0006;z-index:30;display:none}.ov.o{display:block}
+.it{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:10px 0;border-bottom:1px solid #e3d6c0;font-size:15px}
+.q button{width:26px;height:26px;border-radius:50%;border:1px solid var(--ink);background:none;cursor:pointer}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 3px}
+input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #d6c7ab;background:#fff;font:inherit;color:var(--ink)}
+.tot div{display:flex;justify-content:space-between;padding:3px 0}.tot .g{font-weight:700;font-size:20px;border-top:1px solid #d6c7ab;margin-top:6px;padding-top:8px}
+.sub{width:100%;margin-top:16px;background:var(--ink);color:var(--bg);border:0;padding:15px;border-radius:40px;font:inherit;letter-spacing:.08em;cursor:pointer}.sub:hover{background:var(--gold)}
+.ok{display:none;text-align:center;padding:40px 10px;font-size:20px}
+footer{text-align:center;padding:40px 5vw;color:var(--mut);font-size:13px;border-top:1px solid #e3d6c0}
+</style></head>
+<body>
+<header><a class="logo serif" href="#">ATELIER<i>&amp;</i>ELEGANCE</a>
+ <div class="hr"><button class="pill" id="lang"></button><button class="pill cartb" id="cb">🛍<b id="cc">0</b></button></div></header>
+
+<section class="hero">
+ <div><h1 class="serif"><span data-i="h1"></span><br><em data-i="h2"></em></h1><p data-i="sub"></p><a class="cta" href="#shop" data-i="shop"></a></div>
+ <div class="arches"><div class="arch">⌚</div><div class="arch">💍</div><div class="arch">👒</div>
+  <svg class="badge" viewBox="0 0 120 120"><defs><path id="c" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0"/></defs><text font-size="11" letter-spacing="3.2" fill="#b8893b" font-family="Jost"><textPath href="#c">ATELIER &amp; ELEGANCE • EST. 2026 •</textPath></text><text x="60" y="68" font-size="26" text-anchor="middle" fill="#1c1917" font-family="serif" font-style="italic">&amp;</text></svg></div>
+</section>
+<div class="marq"><span id="mq"></span></div>
+
+<section class="sec" id="shop"><h2 class="serif" data-i="col"></h2><div class="cats" id="cats"></div><div class="grid" id="grid"></div></section>
+<footer data-i="foot"></footer>
+
+<div class="ov" id="ov"></div>
+<aside class="dr" id="dr">
+ <div class="row"><h2 class="serif" data-i="cart" style="font-size:30px"></h2><button class="pill" id="x">✕</button></div>
+ <div id="form-wrap">
+  <div id="items"></div>
+  <form id="f">
+   <label data-i="name"></label><input name="name" required>
+   <label data-i="phone"></label><input name="phone" type="tel" required pattern="[0-9+ ]{9,15}">
+   <label data-i="wilaya"></label><select name="wilaya" id="wil"></select>
+   <label data-i="delivery"></label><select id="dlv"></select>
+   <label data-i="address"></label><input name="address" required>
+   <div class="tot"><div><span data-i="subtotal"></span><b id="st"></b></div><div><span data-i="ship"></span><b id="sh"></b></div><div class="g"><span data-i="total"></span><span id="tt"></span></div></div>
+   <button class="sub" data-i="confirm"></button>
+  </form>
+ </div>
+ <div class="ok" id="ok"></div>
+</aside>
+
+<script>
+/* ===== ✏️ CONFIG ===== */
+const CONFIG={
+  supabaseUrl:"https://ifgajqynclqruungignf.supabase.co",
+  supabaseKey:"sb_publishable_WFCsqUHp4gGwKXBG3PutZg_YjJ2r0dD",
+  whatsapp:""   // optionnel, ex: 213555123456
+};
+/* Produits : modifiez ici (img = chemins de vos photos, ex: ["img/montre1.jpg"]) — exemples à remplacer */
+const PRODUCTS=[
+ {id:"w1",cat:"watches",fr:"Montre Rose Gold",ar:"ساعة روز جولد",price:5900,img:[]},
+ {id:"w2",cat:"watches",fr:"Montre Classique Cuir",ar:"ساعة كلاسيك جلد",price:4900,img:[]},
+ {id:"r1",cat:"rings",fr:"Bague Solitaire",ar:"خاتم سوليتير",price:1900,img:[]},
+ {id:"r2",cat:"rings",fr:"Bague Dorée Fine",ar:"خاتم ذهبي رفيع",price:1500,img:[]},
+ {id:"e1",cat:"earrings",fr:"Boucles Perles",ar:"أقراط لؤلؤ",price:1700,img:[]},
+ {id:"e2",cat:"earrings",fr:"Boucles Créoles",ar:"أقراط دائرية",price:1400,img:[]},
+ {id:"h1",cat:"hats",fr:"Chapeau Paille Chic",ar:"قبعة قش أنيقة",price:2200,img:[]},
+ {id:"h2",cat:"hats",fr:"Capeline Élégante",ar:"قبعة كابلين",price:2600,img:[]}
+];
+const WIL=[["Adrar",1300,900],["Chlef",600,450],["Laghouat",950,600],["Oum El Bouaghi",800,450],["Batna",800,450],["Bejaia",800,450],["Biskra",950,600],["Bechar",1100,750],["Blida",700,450],["Bouira",750,450],["Tamanrasset",1550,1100],["Tebessa",900,500],["Tlemcen",850,500],["Tiaret",750,450],["Tizi Ouzou",750,450],["Alger",600,400],["Djelfa",900,600],["Jijel",800,450],["Sétif",800,450],["Saida",800,500],["Skikda",800,450],["Sidi Bel Abbès",750,450],["Annaba",800,450],["Guelma",800,450],["Constantine",800,450],["Medea",700,450],["Mostaganem",750,450],["M'Sila",850,500],["Mascara",700,450],["Ouargla",950,600],["Oran",700,450],["El Bayadh",1000,750],["Illizi",1550,1150],["Bordj Bou Arreridj",800,450],["Boumerdes",750,450],["El Tarf",850,500],["Tindouf",1300,800],["Tissemsilt",700,450],["El Oued",1000,600],["Khenchela",800,500],["Souk Ahras",800,500],["Tipaza",700,450],["Mila",800,450],["Ain Defla",450,300],["Naama",1000,600],["Ain Temouchent",750,450],["Ghardaia",1000,600],["Relizane",750,450],["Timimoun",1350,900],["Bordj Badji Mokhtar",0,0],["Ouled Djellal",900,550],["Béni Abbès",1100,900],["In Salah",1550,1100],["In Guezzam",0,0],["Touggourt",950,600],["Djanet",2200,1600],["M'Ghair",950,600],["Meniaa",950,600]];
+const ICON={watches:"⌚",rings:"💍",earrings:"✨",hats:"👒"},TINT={watches:"#e8d3a3",rings:"#ecd3c9",earrings:"#e6dcef",hats:"#d8dccb"};
+const T={
+fr:{h1:"L’art de",h2:"briller.",sub:"Montres, bagues, boucles d’oreilles et chapeaux choisis avec soin pour sublimer chaque instant.",shop:"DÉCOUVRIR",col:"La Collection",all:"Tout",watches:"Montres",rings:"Bagues",earrings:"Boucles d’oreilles",hats:"Chapeaux",add:"Ajouter",cart:"Mon panier",empty:"Votre panier est vide.",name:"Nom complet",phone:"Téléphone",wilaya:"Wilaya",address:"Adresse",delivery:"Livraison",home:"À domicile",desk:"Point relais",subtotal:"Sous-total",ship:"Livraison",total:"Total à payer",confirm:"CONFIRMER LA COMMANDE",ok:"Merci ! Nous vous appellerons bientôt pour confirmer votre commande 💛",na:"Indisponible",foot:"© ATELIER & ELEGANCE · Paiement à la livraison · Livraison dans les 58 wilayas",mq:"PAIEMENT À LA LIVRAISON ✦ LIVRAISON 58 WILAYAS ✦ NOUVELLE COLLECTION ✦ ",err:"Une erreur est survenue, réessayez.",cur:"DA"},
+ar:{h1:"فنّ",h2:"التألّق.",sub:"ساعات، خواتم، أقراط وقبعات مختارة بعناية لتزيّني كل لحظة.",shop:"اكتشفي",col:"المجموعة",all:"الكل",watches:"ساعات",rings:"خواتم",earrings:"أقراط",hats:"قبعات",add:"أضيفي",cart:"سلّتي",empty:"سلّتك فارغة.",name:"الاسم الكامل",phone:"رقم الهاتف",wilaya:"الولاية",address:"العنوان",delivery:"التوصيل",home:"للمنزل",desk:"نقطة استلام",subtotal:"المجموع الفرعي",ship:"التوصيل",total:"المجموع الكلي",confirm:"تأكيد الطلب",ok:"شكراً لك! سنتصل بك قريباً لتأكيد طلبك 💛",na:"غير متوفر",foot:"© ATELIER & ELEGANCE · الدفع عند الاستلام · التوصيل لـ 58 ولاية",mq:"الدفع عند الاستلام ✦ التوصيل لـ 58 ولاية ✦ مجموعة جديدة ✦ ",err:"حدث خطأ، حاول مرة أخرى",cur:"دج"}};
+const $=s=>document.querySelector(s),fmt=n=>n.toLocaleString("fr-FR").replace(/\u202f/g," ")+" "+T[L].cur;
+let L="fr",cat="all",cart=[];
+try{L=localStorage.getItem("ael")||"fr";cart=JSON.parse(localStorage.getItem("aec")||"[]")}catch(e){}
+const save=()=>{try{localStorage.setItem("aec",JSON.stringify(cart));localStorage.setItem("ael",L)}catch(e){}};
+$("#wil").innerHTML=WIL.map((w,i)=>`<option value="${w[0]}">${String(i+1).padStart(2,"0")} - ${w[0]}</option>`).join("");$("#wil").value="Alger";
+const sub=()=>cart.reduce((s,c)=>s+c.price*c.qty,0),dp=()=>WIL[$("#wil").selectedIndex][$("#dlv").selectedIndex+1];
+function render(){
+  const t=T[L];document.documentElement.lang=L;document.documentElement.dir=L==="ar"?"rtl":"ltr";
+  document.querySelectorAll("[data-i]").forEach(e=>e.textContent=t[e.dataset.i]);
+  $("#lang").textContent=L==="fr"?"العربية":"Français";$("#mq").textContent=t.mq.repeat(8);
+  $("#cats").innerHTML=["all","watches","rings","earrings","hats"].map(c=>`<button class="pill ${c===cat?"on":""}" data-c="${c}">${t[c]}</button>`).join("");
+  $("#grid").innerHTML=PRODUCTS.filter(p=>cat==="all"||p.cat===cat).map(p=>`<div class="p"><div class="pi" style="background:${TINT[p.cat]}">${p.img[0]?`<img src="${p.img[0]}" alt="" loading="lazy">`:ICON[p.cat]}</div><h3 class="serif">${p[L]}</h3><div class="row"><span class="pr">${fmt(p.price)}</span><button class="add" data-a="${p.id}">${t.add}</button></div></div>`).join("");
+  const k=$("#dlv").selectedIndex<0?0:$("#dlv").selectedIndex,w=WIL[$("#wil").selectedIndex];
+  $("#dlv").innerHTML=[t.home,t.desk].map((n,i)=>`<option>${n} — ${w[i+1]?fmt(w[i+1]):t.na}</option>`).join("");$("#dlv").selectedIndex=k;
+  $("#items").innerHTML=cart.length?cart.map((c,i)=>`<div class="it"><span>${c[L]}</span><b>${fmt(c.price*c.qty)}</b><span class="q"><button data-m="${i}">−</button> ${c.qty} <button data-p="${i}">+</button></span><span></span></div>`).join(""):`<p style="margin:24px 0;color:var(--mut)">${t.empty}</p>`;
+  $("#f").style.display=cart.length?"block":"none";
+  $("#st").textContent=fmt(sub());$("#sh").textContent=dp()?fmt(dp()):"—";$("#tt").textContent=fmt(sub()+dp());
+  $("#cc").textContent=cart.reduce((s,c)=>s+c.qty,0);save();
+}
+const open=o=>{$("#dr").classList.toggle("o",o);$("#ov").classList.toggle("o",o)};
+$("#cb").onclick=()=>open(true);$("#x").onclick=$("#ov").onclick=()=>open(false);
+$("#lang").onclick=()=>{L=L==="fr"?"ar":"fr";render()};
+$("#cats").onclick=e=>{const b=e.target.closest("[data-c]");if(b){cat=b.dataset.c;render()}};
+$("#grid").onclick=e=>{const b=e.target.closest("[data-a]");if(!b)return;const p=PRODUCTS.find(x=>x.id===b.dataset.a),c=cart.find(x=>x.id===p.id);
+  c?c.qty++:cart.push({id:p.id,fr:p.fr,ar:p.ar,price:p.price,qty:1});render();b.textContent="✓";setTimeout(()=>b.textContent=T[L].add,900)};
+$("#items").onclick=e=>{const b=e.target.closest("button");if(!b)return;
+  if(b.dataset.p!==undefined)cart[+b.dataset.p].qty++;else if(b.dataset.m!==undefined&&--cart[+b.dataset.m].qty<1)cart.splice(+b.dataset.m,1);render()};
+$("#wil").onchange=$("#dlv").onchange=render;
+$("#f").onsubmit=async e=>{e.preventDefault();if(!cart.length)return;if(!dp()){alert(T[L].na);return}
+  const f=Object.fromEntries(new FormData(e.target)),btn=e.target.querySelector(".sub");btn.disabled=true;
+  const d={name:f.name,phone:f.phone,wilaya:f.wilaya,address:f.address,delivery:["Domicile","Point relais"][$("#dlv").selectedIndex],delivery_price:dp(),
+    items:cart.map(c=>({name:c.fr,qty:c.qty,price:c.price})),subtotal:sub(),total:sub()+dp()};
+  try{const r=await fetch(CONFIG.supabaseUrl+"/rest/v1/ae_orders",{method:"POST",headers:{apikey:CONFIG.supabaseKey,
+    ...(CONFIG.supabaseKey.startsWith("eyJ")?{Authorization:"Bearer "+CONFIG.supabaseKey}:{}),"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(d)});
+    if(!r.ok)throw new Error(await r.text())}catch(err){btn.disabled=false;alert(T[L].err);console.error(err);return}
+  if(CONFIG.whatsapp){window.open("https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(`Commande ATELIER & ELEGANCE\n${d.name} ${d.phone}\n${d.wilaya} - ${d.address}\n`+d.items.map(i=>i.name+" x"+i.qty).join("\n")+"\nTotal: "+d.total),"_blank")}
+  cart=[];save();$("#form-wrap").style.display="none";$("#ok").style.display="block";$("#ok").textContent=T[L].ok;render()};
+render();
+</script></body></html>
