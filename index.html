@@ -83,6 +83,22 @@ header{padding:8px 4vw}.logo{font-size:18px}
 .row{margin:2px}
 .add{padding:4px 10px;font-size:13px}
 }
+/* prix barrés, couleurs, fiche produit */
+.p{position:relative}.pi,.p h3{cursor:pointer}
+.pv{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.old{color:var(--mut);font-size:.85em;text-decoration:line-through}
+.off{position:absolute;top:18px;inset-inline-start:18px;z-index:2;background:var(--gold);color:#fff;font-size:12px;border-radius:20px;padding:2px 9px}
+.dots{display:flex;gap:5px;margin:2px 4px 4px;min-height:14px}.dots i{width:14px;height:14px;border-radius:50%;border:1px solid #0003;cursor:pointer}
+.md{position:fixed;inset:0;background:#0007;z-index:50;display:none;align-items:center;justify-content:center;padding:14px}.md.o{display:flex}
+.mb{background:var(--bg);border-radius:22px;width:min(860px,100%);max-height:92vh;overflow:auto;display:grid;gap:20px;padding:20px;position:relative}
+@media(min-width:760px){.mb{grid-template-columns:1fr 1fr}}
+.mm{aspect-ratio:3/4;border-radius:999px 999px 14px 14px;overflow:hidden;display:grid;place-items:center;font-size:80px}
+@media(max-width:759px){.mm{aspect-ratio:1;border-radius:20px}}
+.mm img{width:100%;height:100%;object-fit:cover}
+.mt{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.mt img{width:58px;height:58px;object-fit:cover;border-radius:10px;border:2px solid transparent;cursor:pointer}.mt img.on{border-color:var(--gold)}
+.mx{position:absolute;top:12px;inset-inline-end:12px;z-index:3;background:var(--bg)}
+.sw{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 18px}
+.sw button{display:flex;align-items:center;gap:6px;border:1px solid #d6c7ab;background:#fff;border-radius:30px;padding:5px 12px;cursor:pointer;font:inherit;color:var(--ink)}.sw button.on{border-color:var(--ink);background:var(--ink);color:var(--bg)}.sw i{width:14px;height:14px;border-radius:50%;border:1px solid #0004}
 </style></head>
 <body>
 <header><a class="logo serif" href="#">ATELIER<i>&amp;</i>ELEGANCE</a>
@@ -116,6 +132,11 @@ header{padding:8px 4vw}.logo{font-size:18px}
  <div class="ok" id="ok"></div>
 </aside>
 
+<div class="md" id="md"><div class="mb"><button class="pill mx" id="mx">✕</button>
+ <div><div class="mm" id="mm"></div><div class="mt" id="mt"></div></div>
+ <div><h2 class="serif" id="mn" style="font-size:32px;font-weight:500;margin-top:8px"></h2><div class="pv" id="mp" style="font-size:20px;margin:6px 0 10px"></div><div id="mcl" style="font-size:13px;color:var(--mut)"></div><div class="sw" id="msw"></div><button class="sub" id="ma"></button></div>
+</div></div>
+
 <script>
 /* ===== ✏️ CONFIG ===== */
 const CONFIG={
@@ -124,7 +145,7 @@ const CONFIG={
   whatsapp:""   // optionnel, ex: 213555123456
 };
 /* Produits : modifiez ici (img = chemins de vos photos, ex: ["img/montre1.jpg"]) — exemples à remplacer */
-const PRODUCTS=[
+const SAMPLE=[
  {id:"w1",cat:"watches",fr:"Montre Rose Gold",ar:"ساعة روز جولد",price:5900,img:[]},
  {id:"w2",cat:"watches",fr:"Montre Classique Cuir",ar:"ساعة كلاسيك جلد",price:4900,img:[]},
  {id:"r1",cat:"rings",fr:"Bague Solitaire",ar:"خاتم سوليتير",price:1900,img:[]},
@@ -134,11 +155,12 @@ const PRODUCTS=[
  {id:"h1",cat:"hats",fr:"Chapeau Paille Chic",ar:"قبعة قش أنيقة",price:2200,img:[]},
  {id:"h2",cat:"hats",fr:"Capeline Élégante",ar:"قبعة كابلين",price:2600,img:[]}
 ];
+let PRODUCTS=[];
 const WIL=[["Adrar",1300,900],["Chlef",600,450],["Laghouat",950,600],["Oum El Bouaghi",800,450],["Batna",800,450],["Bejaia",800,450],["Biskra",950,600],["Bechar",1100,750],["Blida",700,450],["Bouira",750,450],["Tamanrasset",1550,1100],["Tebessa",900,500],["Tlemcen",850,500],["Tiaret",750,450],["Tizi Ouzou",750,450],["Alger",600,400],["Djelfa",900,600],["Jijel",800,450],["Sétif",800,450],["Saida",800,500],["Skikda",800,450],["Sidi Bel Abbès",750,450],["Annaba",800,450],["Guelma",800,450],["Constantine",800,450],["Medea",700,450],["Mostaganem",750,450],["M'Sila",850,500],["Mascara",700,450],["Ouargla",950,600],["Oran",700,450],["El Bayadh",1000,750],["Illizi",1550,1150],["Bordj Bou Arreridj",800,450],["Boumerdes",750,450],["El Tarf",850,500],["Tindouf",1300,800],["Tissemsilt",700,450],["El Oued",1000,600],["Khenchela",800,500],["Souk Ahras",800,500],["Tipaza",700,450],["Mila",800,450],["Ain Defla",450,300],["Naama",1000,600],["Ain Temouchent",750,450],["Ghardaia",1000,600],["Relizane",750,450],["Timimoun",1350,900],["Bordj Badji Mokhtar",0,0],["Ouled Djellal",900,550],["Béni Abbès",1100,900],["In Salah",1550,1100],["In Guezzam",0,0],["Touggourt",950,600],["Djanet",2200,1600],["M'Ghair",950,600],["Meniaa",950,600]];
 const ICON={watches:"⌚",rings:"💍",earrings:"✨",hats:"👒"},TINT={watches:"#e8d3a3",rings:"#ecd3c9",earrings:"#e6dcef",hats:"#d8dccb"};
 const T={
-fr:{h1:"L’art de",h2:"briller.",sub:"Montres, bagues, boucles d’oreilles et chapeaux choisis avec soin pour sublimer chaque instant.",shop:"DÉCOUVRIR",col:"La Collection",all:"Tout",watches:"Montres",rings:"Bagues",earrings:"Boucles d’oreilles",hats:"Chapeaux",add:"Ajouter",cart:"Mon panier",empty:"Votre panier est vide.",name:"Nom complet",phone:"Téléphone",wilaya:"Wilaya",address:"Adresse",delivery:"Livraison",home:"À domicile",desk:"Point relais",subtotal:"Sous-total",ship:"Livraison",total:"Total à payer",confirm:"CONFIRMER LA COMMANDE",ok:"Merci ! Nous vous appellerons bientôt pour confirmer votre commande 💛",na:"Indisponible",foot:"© ATELIER & ELEGANCE · Paiement à la livraison · Livraison dans les 58 wilayas",mq:"PAIEMENT À LA LIVRAISON ✦ LIVRAISON 58 WILAYAS ✦ NOUVELLE COLLECTION ✦ ",err:"Une erreur est survenue, réessayez.",cur:"DA"},
-ar:{h1:"فنّ",h2:"التألّق.",sub:"ساعات، خواتم، أقراط وقبعات مختارة بعناية لتزيّني كل لحظة.",shop:"اكتشفي",col:"المجموعة",all:"الكل",watches:"ساعات",rings:"خواتم",earrings:"أقراط",hats:"قبعات",add:"أضيفي",cart:"سلّتي",empty:"سلّتك فارغة.",name:"الاسم الكامل",phone:"رقم الهاتف",wilaya:"الولاية",address:"العنوان",delivery:"التوصيل",home:"للمنزل",desk:"نقطة استلام",subtotal:"المجموع الفرعي",ship:"التوصيل",total:"المجموع الكلي",confirm:"تأكيد الطلب",ok:"شكراً لك! سنتصل بك قريباً لتأكيد طلبك 💛",na:"غير متوفر",foot:"© ATELIER & ELEGANCE · الدفع عند الاستلام · التوصيل لـ 58 ولاية",mq:"الدفع عند الاستلام ✦ التوصيل لـ 58 ولاية ✦ مجموعة جديدة ✦ ",err:"حدث خطأ، حاول مرة أخرى",cur:"دج"}};
+fr:{h1:"L’art de",h2:"briller.",sub:"Montres, bagues, boucles d’oreilles et chapeaux choisis avec soin pour sublimer chaque instant.",shop:"DÉCOUVRIR",col:"La Collection",all:"Tout",watches:"Montres",rings:"Bagues",earrings:"Boucles d’oreilles",hats:"Chapeaux",add:"Ajouter",cart:"Mon panier",empty:"Votre panier est vide.",name:"Nom complet",phone:"Téléphone",wilaya:"Wilaya",address:"Adresse",delivery:"Livraison",home:"À domicile",desk:"Point relais",subtotal:"Sous-total",ship:"Livraison",total:"Total à payer",confirm:"CONFIRMER LA COMMANDE",ok:"Merci ! Nous vous appellerons bientôt pour confirmer votre commande 💛",na:"Indisponible",foot:"© ATELIER & ELEGANCE · Paiement à la livraison · Livraison dans les 58 wilayas",mq:"PAIEMENT À LA LIVRAISON ✦ LIVRAISON 58 WILAYAS ✦ NOUVELLE COLLECTION ✦ ",err:"Une erreur est survenue, réessayez.",cur:"DA",color:"Couleur"},
+ar:{h1:"فنّ",h2:"التألّق.",sub:"ساعات، خواتم، أقراط وقبعات مختارة بعناية لتزيّني كل لحظة.",shop:"اكتشفي",col:"المجموعة",all:"الكل",watches:"ساعات",rings:"خواتم",earrings:"أقراط",hats:"قبعات",add:"أضيفي",cart:"سلّتي",empty:"سلّتك فارغة.",name:"الاسم الكامل",phone:"رقم الهاتف",wilaya:"الولاية",address:"العنوان",delivery:"التوصيل",home:"للمنزل",desk:"نقطة استلام",subtotal:"المجموع الفرعي",ship:"التوصيل",total:"المجموع الكلي",confirm:"تأكيد الطلب",ok:"شكراً لك! سنتصل بك قريباً لتأكيد طلبك 💛",na:"غير متوفر",foot:"© ATELIER & ELEGANCE · الدفع عند الاستلام · التوصيل لـ 58 ولاية",mq:"الدفع عند الاستلام ✦ التوصيل لـ 58 ولاية ✦ مجموعة جديدة ✦ ",err:"حدث خطأ، حاول مرة أخرى",cur:"دج",color:"اللون"}};
 const $=s=>document.querySelector(s),fmt=n=>n.toLocaleString("fr-FR").replace(/\u202f/g," ")+" "+T[L].cur;
 let L="fr",cat="all",cart=[];
 try{L=localStorage.getItem("ael")||"fr";cart=JSON.parse(localStorage.getItem("aec")||"[]")}catch(e){}
@@ -150,10 +172,11 @@ function render(){
   document.querySelectorAll("[data-i]").forEach(e=>e.textContent=t[e.dataset.i]);
   $("#lang").textContent=L==="fr"?"العربية":"Français";$("#mq").textContent=t.mq.repeat(8);
   $("#cats").innerHTML=["all","watches","rings","earrings","hats"].map(c=>`<button class="pill ${c===cat?"on":""}" data-c="${c}">${t[c]}</button>`).join("");
-  $("#grid").innerHTML=PRODUCTS.filter(p=>cat==="all"||p.cat===cat).map(p=>`<div class="p"><div class="pi" style="background:${TINT[p.cat]}">${p.img[0]?`<img src="${p.img[0]}" alt="" loading="lazy">`:ICON[p.cat]}</div><h3 class="serif">${p[L]}</h3><div class="row"><span class="pr">${fmt(p.price)}</span><button class="add" data-a="${p.id}">${t.add}</button></div></div>`).join("");
+  $("#grid").innerHTML=PRODUCTS.filter(p=>cat==="all"||p.cat===cat).map(p=>{const im=cover(p),o=p.old>p.price?Math.round((1-p.price/p.old)*100):0;
+    return `<div class="p">${o?`<span class="off">-${o}%</span>`:""}<div class="pi" data-o="${esc(p.id)}" style="background:${TINT[p.cat]}">${im?`<img src="${esc(im)}" alt="" loading="lazy">`:ICON[p.cat]}</div><h3 class="serif" data-o="${esc(p.id)}">${esc(p[L])}</h3>${p.colors.length?`<div class="dots">${p.colors.map((c,i)=>`<i data-o="${esc(p.id)}" data-k="${i}" title="${esc(c.name)}" style="background:${esc(c.hex)}"></i>`).join("")}</div>`:""}<div class="row"><div class="pv"><span class="pr">${fmt(p.price)}</span>${o?`<s class="old">${fmt(p.old)}</s>`:""}</div><button class="add" data-a="${esc(p.id)}">${t.add}</button></div></div>`}).join("");
   const k=$("#dlv").selectedIndex<0?0:$("#dlv").selectedIndex,w=WIL[$("#wil").selectedIndex];
   $("#dlv").innerHTML=[t.home,t.desk].map((n,i)=>`<option>${n} — ${w[i+1]?fmt(w[i+1]):t.na}</option>`).join("");$("#dlv").selectedIndex=k;
-  $("#items").innerHTML=cart.length?cart.map((c,i)=>`<div class="it"><span>${c[L]}</span><b>${fmt(c.price*c.qty)}</b><span class="q"><button data-m="${i}">−</button> ${c.qty} <button data-p="${i}">+</button></span><span></span></div>`).join(""):`<p style="margin:24px 0;color:var(--mut)">${t.empty}</p>`;
+  $("#items").innerHTML=cart.length?cart.map((c,i)=>`<div class="it"><span>${esc(c[L]||c.fr)}${c.color?" · "+esc(c.color):""}</span><b>${fmt(c.price*c.qty)}</b><span class="q"><button data-m="${i}">−</button> ${c.qty} <button data-p="${i}">+</button></span><span></span></div>`).join(""):`<p style="margin:24px 0;color:var(--mut)">${t.empty}</p>`;
   $("#f").style.display=cart.length?"block":"none";
   $("#st").textContent=fmt(sub());$("#sh").textContent=dp()?fmt(dp()):"—";$("#tt").textContent=fmt(sub()+dp());
   $("#cc").textContent=cart.reduce((s,c)=>s+c.qty,0);save();
@@ -162,19 +185,50 @@ const open=o=>{$("#dr").classList.toggle("o",o);$("#ov").classList.toggle("o",o)
 $("#cb").onclick=()=>open(true);$("#x").onclick=$("#ov").onclick=()=>open(false);
 $("#lang").onclick=()=>{L=L==="fr"?"ar":"fr";render()};
 $("#cats").onclick=e=>{const b=e.target.closest("[data-c]");if(b){cat=b.dataset.c;render()}};
-$("#grid").onclick=e=>{const b=e.target.closest("[data-a]");if(!b)return;const p=PRODUCTS.find(x=>x.id===b.dataset.a),c=cart.find(x=>x.id===p.id);
-  c?c.qty++:cart.push({id:p.id,fr:p.fr,ar:p.ar,price:p.price,qty:1});render();b.textContent="✓";setTimeout(()=>b.textContent=T[L].add,900)};
+$("#grid").onclick=e=>{const o=e.target.closest("[data-o]");if(o){openM(o.dataset.o,o.dataset.k!==undefined?+o.dataset.k:-1);return}
+  const b=e.target.closest("[data-a]");if(!b)return;const p=PRODUCTS.find(x=>x.id===b.dataset.a);if(!p)return;
+  if(p.colors.length){openM(p.id,-1);return}
+  addC(p,-1);b.textContent="✓";setTimeout(()=>b.textContent=T[L].add,900)};
 $("#items").onclick=e=>{const b=e.target.closest("button");if(!b)return;
   if(b.dataset.p!==undefined)cart[+b.dataset.p].qty++;else if(b.dataset.m!==undefined&&--cart[+b.dataset.m].qty<1)cart.splice(+b.dataset.m,1);render()};
 $("#wil").onchange=$("#dlv").onchange=render;
 $("#f").onsubmit=async e=>{e.preventDefault();if(!cart.length)return;if(!dp()){alert(T[L].na);return}
   const f=Object.fromEntries(new FormData(e.target)),btn=e.target.querySelector(".sub");btn.disabled=true;
   const d={name:f.name,phone:f.phone,wilaya:f.wilaya,address:f.address,delivery:["Domicile","Point relais"][$("#dlv").selectedIndex],delivery_price:dp(),
-    items:cart.map(c=>({name:c.fr,qty:c.qty,price:c.price})),subtotal:sub(),total:sub()+dp()};
+    items:cart.map(c=>({name:c.fr+(c.color?" — "+c.color:""),qty:c.qty,price:c.price})),subtotal:sub(),total:sub()+dp()};
   try{const r=await fetch(CONFIG.supabaseUrl+"/rest/v1/ae_orders",{method:"POST",headers:{apikey:CONFIG.supabaseKey,
     ...(CONFIG.supabaseKey.startsWith("eyJ")?{Authorization:"Bearer "+CONFIG.supabaseKey}:{}),"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(d)});
     if(!r.ok)throw new Error(await r.text())}catch(err){btn.disabled=false;alert(T[L].err);console.error(err);return}
   if(CONFIG.whatsapp){window.open("https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(`Commande ATELIER & ELEGANCE\n${d.name} ${d.phone}\n${d.wilaya} - ${d.address}\n`+d.items.map(i=>i.name+" x"+i.qty).join("\n")+"\nTotal: "+d.total),"_blank")}
   cart=[];save();$("#form-wrap").style.display="none";$("#ok").style.display="block";$("#ok").textContent=T[L].ok;render()};
-render();
+const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const cover=p=>p.img[0]||((p.colors.find(c=>c.images&&c.images[0])||{images:[]}).images[0])||"";
+const nm=p=>({id:p.id,cat:p.cat,fr:p.fr,ar:p.ar||p.fr,price:+p.price,old:+p.old||0,img:p.img||[],colors:(p.colors||[]).map(c=>({name:c.name,hex:c.hex||"#ccc",images:c.images||[]}))});
+async function loadProducts(){
+  try{const r=await fetch(CONFIG.supabaseUrl+"/rest/v1/ae_products?select=*&active=eq.true&order=position.asc,created_at.desc",{headers:{apikey:CONFIG.supabaseKey,...(CONFIG.supabaseKey.startsWith("eyJ")?{Authorization:"Bearer "+CONFIG.supabaseKey}:{})}});
+    if(!r.ok)throw new Error(await r.text());
+    PRODUCTS=(await r.json()).map(p=>nm({id:p.id,cat:p.cat,fr:p.name_fr,ar:p.name_ar,price:p.price,old:p.old_price,img:p.images,colors:p.colors}))}
+  catch(e){console.warn(e);PRODUCTS=SAMPLE.map(nm)}
+  cart.forEach(c=>{const p=PRODUCTS.find(x=>x.id===c.id);if(p)c.price=p.price});
+  render()}
+function addC(p,ci){const c=ci>=0?p.colors[ci]:null,key=p.id+(c?"|"+c.name:""),x=cart.find(z=>(z.key||z.id)===key);
+  x?x.qty++:cart.push({key,id:p.id,fr:p.fr,ar:p.ar,price:p.price,qty:1,color:c?c.name:""});render()}
+let M=null;
+const gal=()=>{const c=M.p.colors[M.ci];return c&&c.images.length?c.images:M.p.img};
+function drawM(){const {p,ci,ii}=M,t=T[L],g=gal(),o=p.old>p.price;
+  $("#mm").style.background=TINT[p.cat];$("#mm").innerHTML=g[ii]?`<img src="${esc(g[ii])}" alt="">`:ICON[p.cat];
+  $("#mt").innerHTML=g.length>1?g.map((u,i)=>`<img src="${esc(u)}" data-t="${i}" class="${i===ii?"on":""}" alt="">`).join(""):"";
+  $("#mn").textContent=p[L];
+  $("#mp").innerHTML=`<span class="pr">${fmt(p.price)}</span>`+(o?`<s class="old">${fmt(p.old)}</s>`:"");
+  $("#mcl").textContent=p.colors.length?t.color:"";
+  $("#msw").innerHTML=p.colors.map((c,i)=>`<button data-k="${i}" class="${i===ci?"on":""}"><i style="background:${esc(c.hex)}"></i>${esc(c.name)}</button>`).join("");
+  $("#ma").textContent=t.add}
+function openM(id,ci){const p=PRODUCTS.find(x=>x.id===id);if(!p)return;M={p,ci:ci<0&&p.colors.length?0:ci,ii:0};drawM();$("#md").classList.add("o")}
+const closeM=()=>$("#md").classList.remove("o");
+$("#mt").onclick=e=>{const i=e.target.dataset.t;if(i!==undefined){M.ii=+i;drawM()}};
+$("#msw").onclick=e=>{const b=e.target.closest("[data-k]");if(b){M.ci=+b.dataset.k;M.ii=0;drawM()}};
+$("#ma").onclick=()=>{addC(M.p,M.ci);$("#ma").textContent="✓";setTimeout(closeM,600)};
+$("#mx").onclick=closeM;$("#md").onclick=e=>{if(e.target.id==="md")closeM()};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeM()});
+render();loadProducts();
 </script></body></html>
