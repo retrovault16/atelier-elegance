@@ -126,6 +126,7 @@ header{padding:8px 4vw}.logo{font-size:18px}
    <label data-i="delivery"></label><select id="dlv"></select>
    <label data-i="address"></label><input name="address" required>
    <div class="tot"><div><span data-i="subtotal"></span><b id="st"></b></div><div><span data-i="ship"></span><b id="sh"></b></div><div class="g"><span data-i="total"></span><span id="tt"></span></div></div>
+   <div id="er" role="alert" style="display:none;margin-top:14px;padding:10px 12px;border-radius:10px;background:#fbe4e1;color:#8a1f12;font-size:14px"></div>
    <button class="sub" data-i="confirm"></button>
   </form>
  </div>
@@ -177,7 +178,7 @@ function render(){
   const k=$("#dlv").selectedIndex<0?0:$("#dlv").selectedIndex,w=WIL[$("#wil").selectedIndex];
   $("#dlv").innerHTML=[t.home,t.desk].map((n,i)=>`<option>${n} — ${w[i+1]?fmt(w[i+1]):t.na}</option>`).join("");$("#dlv").selectedIndex=k;
   $("#items").innerHTML=cart.length?cart.map((c,i)=>`<div class="it"><span>${esc(c[L]||c.fr)}${c.color?" · "+esc(c.color):""}</span><b>${fmt(c.price*c.qty)}</b><span class="q"><button data-m="${i}">−</button> ${c.qty} <button data-p="${i}">+</button></span><span></span></div>`).join(""):`<p style="margin:24px 0;color:var(--mut)">${t.empty}</p>`;
-  $("#f").style.display=cart.length?"block":"none";
+  $("#f").style.display=cart.length?"block":"none";if(cart.length){$("#form-wrap").style.display="";$("#ok").style.display="none"}
   $("#st").textContent=fmt(sub());$("#sh").textContent=dp()?fmt(dp()):"—";$("#tt").textContent=fmt(sub()+dp());
   $("#cc").textContent=cart.reduce((s,c)=>s+c.qty,0);save();
 }
@@ -192,15 +193,17 @@ $("#grid").onclick=e=>{const o=e.target.closest("[data-o]");if(o){openM(o.datase
 $("#items").onclick=e=>{const b=e.target.closest("button");if(!b)return;
   if(b.dataset.p!==undefined)cart[+b.dataset.p].qty++;else if(b.dataset.m!==undefined&&--cart[+b.dataset.m].qty<1)cart.splice(+b.dataset.m,1);render()};
 $("#wil").onchange=$("#dlv").onchange=render;
-$("#f").onsubmit=async e=>{e.preventDefault();if(!cart.length)return;if(!dp()){alert(T[L].na);return}
-  const f=Object.fromEntries(new FormData(e.target)),btn=e.target.querySelector(".sub");btn.disabled=true;
+$("#f").onsubmit=async e=>{e.preventDefault();if(!cart.length)return;if(!dp()){showE(T[L].na);return}
+  const f=Object.fromEntries(new FormData(e.target)),btn=e.target.querySelector(".sub");btn.disabled=true;hideE();
   const d={name:f.name,phone:f.phone,wilaya:f.wilaya,address:f.address,delivery:["Domicile","Point relais"][$("#dlv").selectedIndex],delivery_price:dp(),
     items:cart.map(c=>({name:c.fr+(c.color?" — "+c.color:""),qty:c.qty,price:c.price})),subtotal:sub(),total:sub()+dp()};
-  try{const r=await fetch(CONFIG.supabaseUrl+"/rest/v1/ae_orders",{method:"POST",headers:{apikey:CONFIG.supabaseKey,
+  const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),15000);
+  try{const r=await fetch(CONFIG.supabaseUrl+"/rest/v1/ae_orders",{method:"POST",signal:ctl.signal,headers:{apikey:CONFIG.supabaseKey,
     ...(CONFIG.supabaseKey.startsWith("eyJ")?{Authorization:"Bearer "+CONFIG.supabaseKey}:{}),"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(d)});
-    if(!r.ok)throw new Error(await r.text())}catch(err){btn.disabled=false;alert(T[L].err);console.error(err);return}
+    if(!r.ok)throw new Error(await r.text())}catch(err){clearTimeout(tm);btn.disabled=false;console.error(err);showE(T[L].err,err);return}clearTimeout(tm);btn.disabled=false;
   if(CONFIG.whatsapp){window.open("https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(`Commande ATELIER & ELEGANCE\n${d.name} ${d.phone}\n${d.wilaya} - ${d.address}\n`+d.items.map(i=>i.name+" x"+i.qty).join("\n")+"\nTotal: "+d.total),"_blank")}
   cart=[];save();$("#form-wrap").style.display="none";$("#ok").style.display="block";$("#ok").textContent=T[L].ok;render()};
+const showE=(m,err)=>{const e=$("#er");let d="";if(err)d=err.name==="AbortError"?"Délai dépassé / timeout":String(err.message||err).slice(0,220);e.innerHTML=esc(m)+(d?`<br><small style="opacity:.75;word-break:break-word">${esc(d)}</small>`:"");e.style.display="block";e.scrollIntoView({block:"center",behavior:"smooth"})},hideE=()=>{$("#er").style.display="none"};
 const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const cover=p=>p.img[0]||((p.colors.find(c=>c.images&&c.images[0])||{images:[]}).images[0])||"";
 const nm=p=>({id:p.id,cat:p.cat,fr:p.fr,ar:p.ar||p.fr,price:+p.price,old:+p.old||0,img:p.img||[],colors:(p.colors||[]).map(c=>({name:c.name,hex:c.hex||"#ccc",images:c.images||[]}))});
