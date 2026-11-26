@@ -65,7 +65,25 @@ footer{text-align:center;padding:30px 5vw;color:var(--mut);font-size:13px;border
 .sw{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 18px}
 .sw button{display:flex;align-items:center;gap:6px;border:1px solid #d0d0d0;background:#fff;border-radius:30px;padding:5px 12px;cursor:pointer;font:inherit;color:var(--ink)}.sw button.on{border-color:var(--ink);background:var(--ink);color:#fff}.sw i{width:14px;height:14px;border-radius:50%;border:1px solid #0004}
 @media(max-width:560px){header{padding:8px 3vw;gap:4px}.hl{gap:4px}.logo{font-size:15px}.pill{padding:4px 9px;font-size:12px}.logo{letter-spacing:.1em}.top{padding-top:14px}.top p{font-size:12.5px}.p h3{font-size:14px}}
-</style></head>
+</style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2343577683097753');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2343577683097753&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+</head>
 <body>
 <div class="marq"><span id="mq"></span></div>
 <header>
@@ -165,6 +183,7 @@ $("#f").onsubmit=async e=>{e.preventDefault();if(!cart.length)return;if(!dp()){s
   try{const r=await fetch(CONFIG.supabaseUrl+"/rest/v1/ae_orders",{method:"POST",signal:ctl.signal,headers:{apikey:CONFIG.supabaseKey,
     ...(CONFIG.supabaseKey.startsWith("eyJ")?{Authorization:"Bearer "+CONFIG.supabaseKey}:{}),"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(d)});
     if(!r.ok)throw new Error(await r.text())}catch(err){clearTimeout(tm);btn.disabled=false;console.error(err);showE(T[L].err,err);return}clearTimeout(tm);btn.disabled=false;
+  try{if(window.fbq)fbq("track","Purchase",{value:d.total,currency:"DZD",content_type:"product",content_ids:cart.map(c=>c.id),num_items:cart.reduce((a,c)=>a+c.qty,0)})}catch(_){}
   if(CONFIG.whatsapp){window.open("https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(`Commande ATELIER & ELEGANCE\n${d.name} ${d.phone}\n${d.wilaya} - ${d.address}\n`+d.items.map(i=>i.name+" x"+i.qty).join("\n")+"\nTotal: "+d.total),"_blank")}
   cart=[];save();$("#form-wrap").style.display="none";$("#ok").style.display="block";$("#ok").textContent=T[L].ok;render()};
 const showE=(m,err)=>{const e=$("#er");let d="";if(err)d=err.name==="AbortError"?"Délai dépassé / timeout":String(err.message||err).slice(0,220);e.innerHTML=esc(m)+(d?`<br><small style="opacity:.75;word-break:break-word">${esc(d)}</small>`:"");e.style.display="block";e.scrollIntoView({block:"center",behavior:"smooth"})},hideE=()=>{$("#er").style.display="none"};
